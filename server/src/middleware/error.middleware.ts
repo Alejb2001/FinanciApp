@@ -14,7 +14,7 @@ export const errorHandler = (
     return;
   }
 
-  if ((err as NodeJS.ErrnoException).code === 11000) {
+  if ((err as any).code === 11000) {
     res.status(409).json({ message: 'Duplicate key: resource already exists' });
     return;
   }
