@@ -1,14 +1,43 @@
-header {
-  background-color: #1a73e8;
-  color: white;
-  padding: 1rem 2rem;
+.app-container {
+  height: 100vh;
+}
 
-  h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
+.app-sidenav {
+  width: 220px;
+  border-right: none;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+
+  .sidenav-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 16px;
+    background: #3949ab;
+    color: white;
+
+    .logo-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+
+    .app-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  }
+
+  ::ng-deep .active-link {
+    background: rgba(57, 73, 171, 0.12) !important;
+    color: #3949ab !important;
+    font-weight: 500;
+
+    mat-icon { color: #3949ab; }
   }
 }
 
-main {
-  padding: 2rem;
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }

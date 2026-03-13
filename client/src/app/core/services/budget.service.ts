@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { Budget, CreateBudgetDto, UpdateBudgetDto, BudgetFilters } from '../models/budget.model';
+import { Budget, CreateBudgetDto, UpdateBudgetDto, BudgetFilters, BudgetStatusResponse } from '../models/budget.model';
 import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({ providedIn: 'root' })
@@ -30,5 +30,11 @@ export class BudgetService {
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}`);
+  }
+
+  getStatus(): Observable<BudgetStatusResponse> {
+    return this.http
+      .get<ApiResponse<BudgetStatusResponse>>(`${this.base}/status`)
+      .pipe(map((r) => r.data));
   }
 }

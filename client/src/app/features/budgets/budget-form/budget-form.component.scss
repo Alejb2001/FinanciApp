@@ -1,0 +1,24 @@
+h2[mat-dialog-title] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.budget-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  min-width: 440px;
+
+  mat-form-field { width: 100%; }
+}
+
+.cat-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}

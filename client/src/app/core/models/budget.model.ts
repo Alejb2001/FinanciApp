@@ -29,3 +29,18 @@ export type UpdateBudgetDto = Partial<CreateBudgetDto>;
 export interface BudgetFilters {
   type?: BudgetType;
 }
+
+export type BudgetStatusLevel = 'ok' | 'warning' | 'exceeded';
+
+export interface BudgetStatusItem {
+  budget: Budget;
+  spent: number;
+  remaining: number;
+  percentage: number;
+  status: BudgetStatusLevel;
+}
+
+export interface BudgetStatusResponse {
+  period: { start: string; end: string };
+  items: BudgetStatusItem[];
+}

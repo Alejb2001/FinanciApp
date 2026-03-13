@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>
+  <mat-icon>{{ isEdit ? 'edit' : 'add_circle' }}</mat-icon>
+  {{ isEdit ? 'Editar categoría' : 'Nueva categoría' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="category-form">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" placeholder="Ej: Alimentación">
+      <mat-error>{{ getErrorMessage('name') }}</mat-error>
+    </mat-form-field>
+
+    <div class="color-row">
+      <mat-form-field appearance="outline" class="color-field">
+        <mat-label>Color (hex)</mat-label>
+        <input matInput formControlName="color" placeholder="#3949ab">
+        <mat-error>{{ getErrorMessage('color') }}</mat-error>
+      </mat-form-field>
+      <div class="color-picker-wrapper">
+        <label>Color</label>
+        <input type="color" [value]="previewColor"
+          (input)="form.get('color')?.setValue($any($event.target).value)">
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ícono (Material Icon)</mat-label>
+      <input matInput formControlName="icon" placeholder="Ej: restaurant, directions_car">
+      <mat-icon matSuffix>{{ form.get('icon')?.value || 'label' }}</mat-icon>
+      <mat-hint>Nombre de un ícono de Material Icons</mat-hint>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()" [disabled]="saving">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="saving">
+    @if (saving) {
+      <mat-spinner diameter="18" />
+    } @else {
+      {{ isEdit ? 'Actualizar' : 'Crear' }}
+    }
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,75 @@
+<h2 mat-dialog-title>
+  <mat-icon>{{ isEdit ? 'edit' : 'savings' }}</mat-icon>
+  {{ isEdit ? 'Editar presupuesto' : 'Nuevo presupuesto' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="budget-form">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo de presupuesto</mat-label>
+      <mat-select formControlName="type">
+        <mat-option value="general">
+          <mat-icon>account_balance_wallet</mat-icon> General (todos los gastos)
+        </mat-option>
+        <mat-option value="category">
+          <mat-icon>category</mat-icon> Por categoría
+        </mat-option>
+      </mat-select>
+      <mat-error>{{ getErrorMessage('type') }}</mat-error>
+    </mat-form-field>
+
+    @if (isCategoryType) {
+      <mat-form-field appearance="outline">
+        <mat-label>Categoría</mat-label>
+        <mat-select formControlName="category">
+          @for (cat of categories; track cat._id) {
+            <mat-option [value]="cat._id">
+              <span class="cat-dot" [style.background-color]="cat.color"></span>
+              {{ cat.name }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (categories.length === 0) {
+          <mat-hint>Primero crea una categoría</mat-hint>
+        }
+        <mat-error>{{ getErrorMessage('category') }}</mat-error>
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline">
+      <mat-label>Monto máximo</mat-label>
+      <span matTextPrefix>$&nbsp;</span>
+      <input matInput type="number" formControlName="amount" placeholder="0.00" min="0.01" step="0.01">
+      <mat-error>{{ getErrorMessage('amount') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Período</mat-label>
+      <mat-select formControlName="period">
+        <mat-option value="weekly">Semanal</mat-option>
+        <mat-option value="monthly">Mensual</mat-option>
+        <mat-option value="yearly">Anual</mat-option>
+      </mat-select>
+      <mat-error>{{ getErrorMessage('period') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de inicio</mat-label>
+      <input matInput type="date" formControlName="startDate">
+      <mat-error>{{ getErrorMessage('startDate') }}</mat-error>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()" [disabled]="saving">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="saving">
+    @if (saving) {
+      <mat-spinner diameter="18" />
+    } @else {
+      {{ isEdit ? 'Actualizar' : 'Crear' }}
+    }
+  </button>
+</mat-dialog-actions>

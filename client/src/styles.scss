@@ -1,12 +1,36 @@
-/* Global styles for FinanciaApp */
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$primary: mat.define-palette(mat.$indigo-palette, 700);
+$accent:  mat.define-palette(mat.$teal-palette, A200);
+$warn:    mat.define-palette(mat.$red-palette);
+
+$theme: mat.define-light-theme((
+  color: (primary: $primary, accent: $accent, warn: $warn),
+  typography: mat.define-typography-config($font-family: 'Roboto, sans-serif'),
+  density: 0,
+));
+
+@include mat.all-component-themes($theme);
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f7fa;
+html, body {
+  height: 100%;
+  font-family: Roboto, sans-serif;
+  background-color: #f0f2f5;
   color: #333;
 }
+
+.page-container {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.spacer { flex: 1 1 auto; }

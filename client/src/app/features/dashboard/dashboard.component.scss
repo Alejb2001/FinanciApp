@@ -1,0 +1,168 @@
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #3949ab;
+  }
+
+  .period-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #666;
+    font-size: 0.9rem;
+    text-transform: capitalize;
+  }
+}
+
+// Summary card
+.summary-card {
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%);
+  color: white;
+
+  ::ng-deep .mat-mdc-card-content { color: white; }
+
+  .summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .summary-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    mat-icon { font-size: 36px; width: 36px; height: 36px; opacity: 0.9; }
+  }
+
+  .summary-label { font-size: 0.85rem; opacity: 0.85; margin-bottom: 2px; }
+
+  .summary-amount {
+    font-size: 1.6rem;
+    font-weight: 600;
+    .summary-of { font-size: 1rem; opacity: 0.7; }
+  }
+
+  .summary-pct {
+    font-size: 2rem;
+    font-weight: 700;
+    opacity: 0.9;
+  }
+
+  .summary-bar { border-radius: 4px; height: 8px; }
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+// Budget cards grid
+.budget-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.budget-card {
+  transition: box-shadow 0.2s;
+
+  &:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+  &.warning { border-left: 4px solid #ff9800; }
+  &.exceeded { border-left: 4px solid #f44336; }
+
+  .budget-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .cat-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .budget-info { flex: 1; }
+
+  .budget-name {
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  .budget-period {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: capitalize;
+  }
+
+  .status-icon {
+    &.ok    { color: #4caf50; }
+    &.warning  { color: #ff9800; }
+    &.exceeded { color: #f44336; }
+  }
+
+  .budget-amounts {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 8px;
+
+    .spent    { font-size: 1.2rem; font-weight: 600; }
+    .divider  { color: #bbb; }
+    .total    { color: #888; font-size: 0.9rem; }
+  }
+
+  .budget-bar { border-radius: 4px; margin-bottom: 8px; }
+
+  .budget-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+
+    .pct-label  { color: #888; }
+    .remaining {
+      font-weight: 500;
+      &.ok       { color: #4caf50; }
+      &.exceeded { color: #f44336; }
+    }
+  }
+}
+
+.empty-card {
+  ::ng-deep .mat-mdc-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 48px;
+    color: #999;
+
+    mat-icon { font-size: 56px; width: 56px; height: 56px; }
+    p { font-size: 1rem; }
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}

@@ -1,0 +1,58 @@
+.budgets-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #3949ab;
+  }
+}
+
+.budgets-table { width: 100%; }
+
+.amount-header, .amount-cell { text-align: right !important; }
+.amount-cell { font-weight: 500; }
+
+.period-cell { color: #666; }
+
+.actions-cell { text-align: right; white-space: nowrap; }
+
+.cat-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .cat-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+}
+
+.all-label { color: #888; font-style: italic; }
+
+mat-chip {
+  &.general { background: #e8eaf6 !important; color: #3949ab !important; }
+  &.category { background: #e0f2f1 !important; color: #00796b !important; }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px;
+  color: #999;
+
+  mat-icon { font-size: 48px; width: 48px; height: 48px; }
+}

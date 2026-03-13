@@ -1,0 +1,97 @@
+<div class="dashboard-header">
+  <h2>Dashboard</h2>
+  @if (status) {
+    <span class="period-label">
+      <mat-icon>calendar_month</mat-icon>
+      {{ status.period.start | date:'MMMM yyyy' }}
+    </span>
+  }
+</div>
+
+@if (loading) {
+  <div class="loading-container">
+    <mat-spinner diameter="48" />
+  </div>
+} @else if (!status || status.items.length === 0) {
+  <mat-card class="empty-card">
+    <mat-card-content>
+      <mat-icon>savings</mat-icon>
+      <p>No hay presupuestos configurados aún.</p>
+      <button mat-raised-button color="primary" routerLink="/budgets">
+        Configurar presupuestos
+      </button>
+    </mat-card-content>
+  </mat-card>
+} @else {
+
+  <!-- Resumen general -->
+  @if (totalBudget > 0) {
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-row">
+          <div class="summary-info">
+            <mat-icon>account_balance_wallet</mat-icon>
+            <div>
+              <p class="summary-label">Gasto total del mes</p>
+              <p class="summary-amount">{{ totalSpent | currency:'USD':'symbol':'1.2-2' }}
+                <span class="summary-of">/ {{ totalBudget | currency:'USD':'symbol':'1.2-2' }}</span>
+              </p>
+            </div>
+          </div>
+          <div class="summary-pct">{{ (totalSpent / totalBudget * 100) | number:'1.0-0' }}%</div>
+        </div>
+        <mat-progress-bar
+          [value]="(totalSpent / totalBudget) * 100 | number:'1.0-0'"
+          [color]="getProgressColor(totalSpent >= totalBudget ? 'exceeded' : totalSpent / totalBudget >= 0.8 ? 'warning' : 'ok')"
+          class="summary-bar">
+        </mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Estado por presupuesto -->
+  <h3 class="section-title">Estado por presupuesto</h3>
+  <div class="budget-grid">
+    @for (item of status.items; track item.budget._id) {
+      <mat-card class="budget-card" [class.exceeded]="item.status === 'exceeded'" [class.warning]="item.status === 'warning'">
+        <mat-card-content>
+
+          <div class="budget-card-header">
+            <div class="cat-badge" [style.background-color]="getCategoryColor(item) + '22'">
+              <mat-icon [style.color]="getCategoryColor(item)">{{ getCategoryIcon(item) }}</mat-icon>
+            </div>
+            <div class="budget-info">
+              <p class="budget-name">{{ getCategoryName(item) }}</p>
+              <p class="budget-period">{{ item.budget.period }}</p>
+            </div>
+            <mat-icon class="status-icon" [class]="item.status">
+              {{ getStatusIcon(item.status) }}
+            </mat-icon>
+          </div>
+
+          <div class="budget-amounts">
+            <span class="spent">{{ item.spent | currency:'USD':'symbol':'1.2-2' }}</span>
+            <span class="divider">/</span>
+            <span class="total">{{ item.budget.amount | currency:'USD':'symbol':'1.2-2' }}</span>
+          </div>
+
+          <mat-progress-bar
+            [value]="getProgressValue(item)"
+            [color]="getProgressColor(item.status)"
+            class="budget-bar">
+          </mat-progress-bar>
+
+          <div class="budget-footer">
+            <span class="pct-label">{{ item.percentage | number:'1.0-1' }}% consumido</span>
+            @if (item.remaining >= 0) {
+              <span class="remaining ok">{{ item.remaining | currency:'USD':'symbol':'1.2-2' }} disponible</span>
+            } @else {
+              <span class="remaining exceeded">{{ (item.remaining * -1) | currency:'USD':'symbol':'1.2-2' }} excedido</span>
+            }
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+}

@@ -1,0 +1,77 @@
+<div class="budgets-header">
+  <h2>Presupuestos</h2>
+  <button mat-raised-button color="primary" (click)="openForm()">
+    <mat-icon>add</mat-icon> Nuevo presupuesto
+  </button>
+</div>
+
+<mat-card>
+  <mat-card-content>
+
+    @if (loading) {
+      <div class="loading-container">
+        <mat-spinner diameter="48" />
+      </div>
+    } @else if (budgets.length === 0) {
+      <div class="empty-state">
+        <mat-icon>savings</mat-icon>
+        <p>No hay presupuestos configurados.</p>
+        <button mat-stroked-button color="primary" (click)="openForm()">Crear presupuesto</button>
+      </div>
+    } @else {
+      <table mat-table [dataSource]="budgets" class="budgets-table">
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let b">
+            <mat-chip [class]="b.type">{{ b.type === 'general' ? 'General' : 'Categoría' }}</mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>Categoría</th>
+          <td mat-cell *matCellDef="let b">
+            @if (b.type === 'category') {
+              <span class="cat-label">
+                <span class="cat-dot" [style.background-color]="getCategoryColor(b.category)"></span>
+                {{ getCategoryName(b.category) }}
+              </span>
+            } @else {
+              <span class="all-label">Todos los gastos</span>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef class="amount-header">Monto máximo</th>
+          <td mat-cell *matCellDef="let b" class="amount-cell">
+            {{ b.amount | currency:'USD':'symbol':'1.2-2' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="period">
+          <th mat-header-cell *matHeaderCellDef>Período</th>
+          <td mat-cell *matCellDef="let b" class="period-cell">
+            {{ b.period === 'monthly' ? 'Mensual' : b.period === 'weekly' ? 'Semanal' : 'Anual' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let b" class="actions-cell">
+            <button mat-icon-button color="primary" matTooltip="Editar" (click)="openForm(b)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="delete(b)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    }
+
+  </mat-card-content>
+</mat-card>

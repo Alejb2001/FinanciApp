@@ -1,0 +1,41 @@
+<div class="categories-header">
+  <h2>Categorías</h2>
+  <button mat-raised-button color="primary" (click)="openForm()">
+    <mat-icon>add</mat-icon> Nueva categoría
+  </button>
+</div>
+
+@if (loading) {
+  <div class="loading-container">
+    <mat-spinner diameter="48" />
+  </div>
+} @else if (categories.length === 0) {
+  <div class="empty-state">
+    <mat-icon>category</mat-icon>
+    <p>No hay categorías aún. Crea una para empezar a registrar gastos.</p>
+    <button mat-stroked-button color="primary" (click)="openForm()">Crear categoría</button>
+  </div>
+} @else {
+  <div class="categories-grid">
+    @for (cat of categories; track cat._id) {
+      <mat-card class="category-card">
+        <mat-card-content>
+          <div class="card-top">
+            <div class="color-badge" [style.background-color]="cat.color">
+              <mat-icon>{{ cat.icon || 'label' }}</mat-icon>
+            </div>
+            <div class="card-actions">
+              <button mat-icon-button color="primary" matTooltip="Editar" (click)="openForm(cat)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="delete(cat)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <p class="cat-name">{{ cat.name }}</p>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+}
