@@ -3,3 +3,4 @@ export * from './category.model';
 export * from './expense.model';
 export * from './budget.model';
 export * from './receipt.model';
+export * from './stats.model';

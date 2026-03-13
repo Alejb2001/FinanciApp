@@ -8,7 +8,55 @@
   }
 </div>
 
-@if (loading) {
+<!-- ── CHARTS ROW ─────────────────────────────────────────────── -->
+@if (statsLoading) {
+  <div class="charts-loading">
+    <mat-spinner diameter="40" />
+    <span>Cargando estadísticas…</span>
+  </div>
+} @else if (statsLoaded) {
+  <div class="charts-row">
+
+    <!-- Doughnut: expense by category -->
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>pie_chart</mat-icon>
+        <mat-card-title>Gastos por categoría</mat-card-title>
+        <mat-card-subtitle>{{ categoryStats?.period }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @if ((categoryStats?.items?.length ?? 0) === 0) {
+          <div class="chart-empty">
+            <mat-icon>donut_large</mat-icon>
+            <span>Sin gastos este mes</span>
+          </div>
+        } @else {
+          <div class="chart-wrapper">
+            <canvas #pieCanvas></canvas>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Line: monthly evolution -->
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>show_chart</mat-icon>
+        <mat-card-title>Evolución mensual</mat-card-title>
+        <mat-card-subtitle>{{ monthlyStats?.year }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-wrapper">
+          <canvas #lineCanvas></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+}
+
+<!-- ── BUDGET STATUS ──────────────────────────────────────────── -->
+@if (budgetsLoading) {
   <div class="loading-container">
     <mat-spinner diameter="48" />
   </div>
@@ -24,7 +72,6 @@
   </mat-card>
 } @else {
 
-  <!-- Resumen general -->
   @if (totalBudget > 0) {
     <mat-card class="summary-card">
       <mat-card-content>
@@ -41,7 +88,7 @@
           <div class="summary-pct">{{ (totalSpent / totalBudget * 100) | number:'1.0-0' }}%</div>
         </div>
         <mat-progress-bar
-          [value]="(totalSpent / totalBudget) * 100 | number:'1.0-0'"
+          [value]="(totalSpent / totalBudget) * 100"
           [color]="getProgressColor(totalSpent >= totalBudget ? 'exceeded' : totalSpent / totalBudget >= 0.8 ? 'warning' : 'ok')"
           class="summary-bar">
         </mat-progress-bar>
@@ -49,13 +96,13 @@
     </mat-card>
   }
 
-  <!-- Estado por presupuesto -->
   <h3 class="section-title">Estado por presupuesto</h3>
   <div class="budget-grid">
     @for (item of status.items; track item.budget._id) {
-      <mat-card class="budget-card" [class.exceeded]="item.status === 'exceeded'" [class.warning]="item.status === 'warning'">
+      <mat-card class="budget-card"
+        [class.exceeded]="item.status === 'exceeded'"
+        [class.warning]="item.status === 'warning'">
         <mat-card-content>
-
           <div class="budget-card-header">
             <div class="cat-badge" [style.background-color]="getCategoryColor(item) + '22'">
               <mat-icon [style.color]="getCategoryColor(item)">{{ getCategoryIcon(item) }}</mat-icon>
@@ -64,9 +111,7 @@
               <p class="budget-name">{{ getCategoryName(item) }}</p>
               <p class="budget-period">{{ item.budget.period }}</p>
             </div>
-            <mat-icon class="status-icon" [class]="item.status">
-              {{ getStatusIcon(item.status) }}
-            </mat-icon>
+            <mat-icon class="status-icon" [class]="item.status">{{ getStatusIcon(item.status) }}</mat-icon>
           </div>
 
           <div class="budget-amounts">
@@ -89,7 +134,6 @@
               <span class="remaining exceeded">{{ (item.remaining * -1) | currency:'USD':'symbol':'1.2-2' }} excedido</span>
             }
           </div>
-
         </mat-card-content>
       </mat-card>
     }

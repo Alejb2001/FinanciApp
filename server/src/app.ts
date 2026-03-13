@@ -27,17 +27,22 @@ app.use(express.urlencoded({ extended: true }));
 // API routes
 app.use('/api', apiRouter);
 
-// Global error handler (must be after routes)
-app.use(errorHandler);
+// Catch unknown /api/* routes before static serving
+app.use('/api', (_req, res) => {
+  res.status(404).json({ message: 'API endpoint not found' });
+});
 
 // Serve Angular static files in production
 if (config.nodeEnv === 'production') {
   app.use(express.static(config.clientDistPath));
 
-  // Catch-all: send index.html for Angular client-side routing
-  app.get('*', (_req, res) => {
+  // Angular client-side routing — must NOT catch /api paths
+  app.get(/^\/(?!api).*/, (_req, res) => {
     res.sendFile(path.join(config.clientDistPath, 'index.html'));
   });
 }
+
+// Global error handler — must be last
+app.use(errorHandler);
 
 export default app;
