@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: financiaapp
+    runtime: node
+    buildCommand: npm run install:all && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        generateValue: false
+        value: 3000
