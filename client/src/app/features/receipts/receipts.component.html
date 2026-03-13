@@ -1,0 +1,154 @@
+<div class="receipts-header">
+  <h2>Subir recibo o estado de cuenta</h2>
+</div>
+
+<!-- ── STEP 1: Upload ──────────────────────────────────────────── -->
+@if (state === 'upload') {
+  <mat-card class="upload-card">
+    <mat-card-content>
+      <div class="drop-zone"
+           [class.drag-over]="dragOver"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave()"
+           (drop)="onDrop($event)"
+           (click)="fileInput.click()">
+
+        <mat-icon class="upload-icon">upload_file</mat-icon>
+        <p class="drop-title">Arrastra tu PDF aquí</p>
+        <p class="drop-subtitle">o haz clic para seleccionar un archivo</p>
+        <span class="drop-hint">Recibos de luz, agua, teléfono, estados de cuenta — máx. 10 MB</span>
+        <input #fileInput type="file" accept="application/pdf" hidden (change)="onFileSelected($event)">
+      </div>
+    </mat-card-content>
+  </mat-card>
+}
+
+<!-- ── STEP 2: Uploading / Parsing ────────────────────────────── -->
+@if (state === 'uploading') {
+  <mat-card class="status-card">
+    <mat-card-content>
+      <mat-spinner diameter="56" />
+      <p class="status-msg">Procesando <strong>{{ fileName }}</strong>…</p>
+      <p class="status-sub">Extrayendo monto y fecha del documento</p>
+    </mat-card-content>
+  </mat-card>
+}
+
+<!-- ── STEP 3: Review & Confirm ───────────────────────────────── -->
+@if (state === 'review' || state === 'saving') {
+  <div class="review-layout">
+
+    <!-- Extracted data panel -->
+    <mat-card class="extracted-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>find_in_page</mat-icon>
+        <mat-card-title>Datos extraídos</mat-card-title>
+        <mat-card-subtitle>{{ fileName }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+
+        <div class="confidence-badge" [class]="getConfidenceBadge().css">
+          <mat-icon>{{ getConfidenceBadge().icon }}</mat-icon>
+          <span>{{ getConfidenceBadge().label }}</span>
+        </div>
+
+        <mat-divider />
+
+        <div class="extracted-row">
+          <span class="ext-label"><mat-icon>attach_money</mat-icon> Monto detectado</span>
+          <span class="ext-value">
+            {{ extracted?.extractedAmount != null ? ('$' + extracted!.extractedAmount) : 'No detectado' }}
+          </span>
+        </div>
+
+        <div class="extracted-row">
+          <span class="ext-label"><mat-icon>calendar_today</mat-icon> Fecha detectada</span>
+          <span class="ext-value">{{ extracted?.extractedDate ?? 'No detectada' }}</span>
+        </div>
+
+        <mat-divider />
+
+        <p class="preview-label">Vista previa del texto:</p>
+        <pre class="text-preview">{{ extracted?.preview }}</pre>
+
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Confirmation form -->
+    <mat-card class="confirm-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>edit_note</mat-icon>
+        <mat-card-title>Confirmar y guardar gasto</mat-card-title>
+        <mat-card-subtitle>Verifica o corrige los datos extraídos</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+
+        <form [formGroup]="confirmForm" class="confirm-form">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Monto</mat-label>
+            <span matTextPrefix>$&nbsp;</span>
+            <input matInput type="number" formControlName="amount" min="0.01" step="0.01">
+            <mat-error>{{ getErrorMessage('amount') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha</mat-label>
+            <input matInput type="date" formControlName="date">
+            <mat-error>{{ getErrorMessage('date') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Descripción</mat-label>
+            <input matInput formControlName="description" placeholder="Ej: Factura de luz — marzo 2024">
+            <mat-error>{{ getErrorMessage('description') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Categoría</mat-label>
+            <mat-select formControlName="category">
+              @for (cat of categories; track cat._id) {
+                <mat-option [value]="cat._id">
+                  <span class="cat-dot" [style.background-color]="cat.color"></span>
+                  {{ cat.name }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-error>{{ getErrorMessage('category') }}</mat-error>
+          </mat-form-field>
+
+        </form>
+
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button (click)="reset()" [disabled]="state === 'saving'">
+          <mat-icon>arrow_back</mat-icon> Volver
+        </button>
+        <button mat-raised-button color="primary" (click)="save()" [disabled]="state === 'saving'">
+          @if (state === 'saving') {
+            <mat-spinner diameter="18" />
+          } @else {
+            <mat-icon>save</mat-icon> Guardar gasto
+          }
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+  </div>
+}
+
+<!-- ── STEP 4: Done ────────────────────────────────────────────── -->
+@if (state === 'done') {
+  <mat-card class="status-card done-card">
+    <mat-card-content>
+      <mat-icon class="done-icon">check_circle</mat-icon>
+      <p class="status-msg">¡Gasto registrado con éxito!</p>
+      <div class="done-actions">
+        <button mat-raised-button color="primary" (click)="reset()">
+          <mat-icon>upload_file</mat-icon> Subir otro recibo
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+}

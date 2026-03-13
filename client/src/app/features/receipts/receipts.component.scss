@@ -1,0 +1,165 @@
+.receipts-header {
+  margin-bottom: 20px;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #3949ab;
+  }
+}
+
+// Upload drop zone
+.upload-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.drop-zone {
+  border: 2px dashed #c5cae9;
+  border-radius: 12px;
+  padding: 56px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  &:hover, &.drag-over {
+    border-color: #3949ab;
+    background: #e8eaf6;
+  }
+
+  .upload-icon {
+    font-size: 56px;
+    width: 56px;
+    height: 56px;
+    color: #3949ab;
+    opacity: 0.7;
+  }
+
+  .drop-title    { font-size: 1.1rem; font-weight: 500; color: #333; }
+  .drop-subtitle { color: #666; }
+  .drop-hint     { font-size: 0.78rem; color: #999; margin-top: 4px; }
+}
+
+// Uploading / Done cards
+.status-card {
+  max-width: 480px;
+  margin: 40px auto 0;
+
+  ::ng-deep .mat-mdc-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .status-msg { font-size: 1rem; font-weight: 500; }
+  .status-sub { color: #888; font-size: 0.9rem; }
+}
+
+.done-card {
+  .done-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #4caf50;
+  }
+
+  .done-actions { margin-top: 8px; }
+}
+
+// Review layout
+.review-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.extracted-card {
+  .confidence-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+
+    &.high   { background: #e8f5e9; color: #2e7d32; }
+    &.medium { background: #fff3e0; color: #e65100; }
+    &.low    { background: #fce4ec; color: #b71c1c; }
+  }
+
+  mat-divider { margin: 12px 0; }
+
+  .extracted-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+
+    .ext-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #666;
+      font-size: 0.88rem;
+
+      mat-icon { font-size: 16px; width: 16px; height: 16px; }
+    }
+
+    .ext-value { font-weight: 500; }
+  }
+
+  .preview-label {
+    font-size: 0.78rem;
+    color: #999;
+    margin: 12px 0 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .text-preview {
+    background: #f5f5f5;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 0.75rem;
+    color: #555;
+    max-height: 180px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: 'Roboto Mono', monospace;
+  }
+}
+
+.confirm-card {
+  .confirm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 8px;
+
+    mat-form-field { width: 100%; }
+  }
+
+  .cat-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+}
